@@ -1,5 +1,6 @@
 # coding: utf-8
 import json
+import os
 from datetime import datetime
 import logging
 from enum import Enum, IntEnum
@@ -13,6 +14,7 @@ from markupsafe import Markup
 from werkzeug.routing import ValidationError
 
 from config import dev
+from config import online
 from flask_sqlalchemy import SQLAlchemy
 import requests
 
@@ -20,9 +22,14 @@ from flask_babelex import Babel
 from flask_migrate import Migrate
 
 
+is_debug = os.environ.get('LIJIANG_DEBUG')
 
 app = Flask(__name__)
-app.config.from_object(dev)
+if is_debug:
+    app.config.from_object(dev)
+else:
+    app.config.from_object(online)
+
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(message)s')
 
