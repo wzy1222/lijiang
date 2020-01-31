@@ -26,8 +26,10 @@ is_debug = os.environ.get('LIJIANG_DEBUG')
 
 app = Flask(__name__)
 if is_debug:
+    logging.info(f"loading config, dev")
     app.config.from_object(dev)
 else:
+    logging.info(f"loading config, online")
     app.config.from_object(online)
 
 
