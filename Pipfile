@@ -14,6 +14,7 @@ requests = "*"
 flask-babelex = "*"
 flask-migrate = "*"
 pymysql = "*"
+flask-script = "*"
 
 [requires]
 python_version = "3.6"
