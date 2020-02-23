@@ -453,7 +453,7 @@ def wx_msg_callback_get():
 
 @app.route('/wx/msg/callback', methods=['POST'])
 def wx_msg_callback_post():
-    str_xml = request.json  # 获得post来的数据
+    str_xml = request.data # 获得post来的数据
     logging.info(str_xml)
     xml = etree.fromstring(str_xml)  # 进行XML解析
     fromUser = xml.find("FromUserName").text
