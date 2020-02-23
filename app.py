@@ -460,17 +460,13 @@ def wx_msg_callback_post():
     toUser = xml.find("ToUserName").text
     msgType = xml.find("MsgType").text
 
+
     if msgType == 'text':
         content = xml.find("Content").text  # 获得用户所输入的内容
-        if content.lower() == 'help':
-            replayText = '（1）输入6位股票代码可返回股票信息，股票代码后附“+”返回简洁即时信息。\n' + \
-                         '（2）输入110、119或120、121、140可获取股票筛选信息。\n' \
-                         '其他功能正在开发中，期望您的更多建议。\n\n' \
-                         '『可将我们的图标添加到桌面，便于您访问。』'
-            return render.reply_text(fromUser, toUser, int(time.time()), replayText)
-        else:
-            replayText = '您的输入有误...未来将会输出你输入关键字的百度搜索结果。'
-            return render.reply_text(fromUser, toUser, int(time.time()), replayText)
+        createTime = int(time.time())
+        reply = f"hello {content}"
+        return render_template("wx_msg_reply_text.xml", fromUser=fromUser, toUser=toUser,
+                               createTime=createTime, content=reply)
 
 
 
