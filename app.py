@@ -423,7 +423,7 @@ def logout():
     return "logout done"
 
 
-@app.route('/wx/msg/callback/', methods=['GET'])
+@app.route('/wx/msg/callback', methods=['GET'])
 def wx_msg_callback_get():
     data = request.args
 
@@ -449,8 +449,9 @@ def wx_msg_callback_get():
     if hashcode == signature or True:
         # print echostr
         return echostr
+    return echostr
 
-@app.route('/wx/msg/callback/', methods=['POST'])
+@app.route('/wx/msg/callback', methods=['POST'])
 def wx_msg_callback_post():
     str_xml = request.json  # 获得post来的数据
     logging.info(str_xml)
