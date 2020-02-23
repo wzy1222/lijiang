@@ -434,8 +434,9 @@ def wx_msg_callback_get():
     timestamp = data.get('timestamp')
     nonce = data.get('nonce')
     echostr = data.get('echostr')
+    return echostr
     # 自己的token
-    token = "lijiang_happy"  # 这里改写你在微信公众平台里输入的token
+    token = "lijianghappy"  # 这里改写你在微信公众平台里输入的token
     # 字典序排序
     list = [token, timestamp, nonce]
     list.sort()
