@@ -22,6 +22,13 @@ from flask_babelex import Babel
 from flask_migrate import Migrate
 
 
+import hashlib
+import time
+import os
+from lxml import etree
+
+
+
 is_debug = os.environ.get('LIJIANG_DEBUG')
 
 app = Flask(__name__)
@@ -44,6 +51,8 @@ migrate = Migrate(app, db)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+
 
 
 class UserTypeEnum(Enum):
@@ -412,6 +421,56 @@ def auth():
 def logout():
     session.clear()
     return "logout done"
+
+
+@app.route('/wx/msg/callback/', methods=['GET'])
+def wx_msg_callback_get():
+    data = request.args
+
+    logging.info(f"data={data}")
+
+
+    signature = data.get('signature')
+    timestamp = data.get('timestamp')
+    nonce = data.get('nonce')
+    echostr = data.get('echostr')
+    # 自己的token
+    token = "lijiang_happy"  # 这里改写你在微信公众平台里输入的token
+    # 字典序排序
+    list = [token, timestamp, nonce]
+    list.sort()
+    sha1 = hashlib.sha1()
+    map(sha1.update, list)
+    hashcode = sha1.hexdigest()
+    # sha1加密算法
+
+    # 如果是来自微信的请求，则回复echostr
+    if hashcode == signature:
+        # print echostr
+        return echostr
+
+@app.route('/wx/msg/callback/', methods=['POST'])
+def wx_msg_callback_post():
+    str_xml = request.json  # 获得post来的数据
+    logging.info(str_xml)
+    xml = etree.fromstring(str_xml)  # 进行XML解析
+    fromUser = xml.find("FromUserName").text
+    toUser = xml.find("ToUserName").text
+    msgType = xml.find("MsgType").text
+
+    if msgType == 'text':
+        content = xml.find("Content").text  # 获得用户所输入的内容
+        if content.lower() == 'help':
+            replayText = '（1）输入6位股票代码可返回股票信息，股票代码后附“+”返回简洁即时信息。\n' + \
+                         '（2）输入110、119或120、121、140可获取股票筛选信息。\n' \
+                         '其他功能正在开发中，期望您的更多建议。\n\n' \
+                         '『可将我们的图标添加到桌面，便于您访问。』'
+            return render.reply_text(fromUser, toUser, int(time.time()), replayText)
+        else:
+            replayText = '您的输入有误...未来将会输出你输入关键字的百度搜索结果。'
+            return render.reply_text(fromUser, toUser, int(time.time()), replayText)
+
+
 
 
 if __name__ == '__main__':

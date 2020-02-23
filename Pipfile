@@ -15,6 +15,7 @@ flask-babelex = "*"
 flask-migrate = "*"
 pymysql = "*"
 flask-script = "*"
+lxml = "*"
 
 [requires]
 python_version = "3.6"
