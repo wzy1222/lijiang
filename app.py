@@ -469,7 +469,7 @@ def wx_msg_callback_post():
         createTime = int(time.time())
         reply = f"hello {content}"
 
-        t = render_template("wx_msg_reply_text.xml", fromUser=fromUser, toUser=toUser,
+        t = render_template("wx_msg_reply_text.xml", fromUser=toUser, toUser=fromUser,
                                createTime=createTime, content=reply)
         logging.info(f"t = {t}")
         return t
