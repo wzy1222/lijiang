@@ -30,6 +30,8 @@ from lxml import etree
 
 
 is_debug = os.environ.get('LIJIANG_DEBUG')
+logging.basicConfig(level=logging.DEBUG)
+
 
 app = Flask(__name__)
 if is_debug:
@@ -461,14 +463,16 @@ def wx_msg_callback_post():
     msgType = xml.find("MsgType").text
 
 
+    logging.info(f"msgtpye = {msgType}")
     if msgType == 'text':
         content = xml.find("Content").text  # 获得用户所输入的内容
         createTime = int(time.time())
         reply = f"hello {content}"
-        return render_template("wx_msg_reply_text.xml", fromUser=fromUser, toUser=toUser,
+
+        t = render_template("wx_msg_reply_text.xml", fromUser=fromUser, toUser=toUser,
                                createTime=createTime, content=reply)
-
-
+        logging.info(f"t = {t}")
+        return t
 
 
 if __name__ == '__main__':
